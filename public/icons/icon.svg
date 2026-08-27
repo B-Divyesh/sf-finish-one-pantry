@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="A pantry package with a checked notebook line">
+  <rect width="512" height="512" rx="80" fill="#F4F0E4"/>
+  <path d="M112 88h226l62 62v274H112z" fill="#FFFDF6" stroke="#162C35" stroke-width="24" stroke-linejoin="round"/>
+  <path d="M338 88v66h62" fill="none" stroke="#162C35" stroke-width="24" stroke-linejoin="round"/>
+  <path d="M166 236l29 31 56-67" fill="none" stroke="#A23C2C" stroke-width="28" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M166 327h179M166 371h132" fill="none" stroke="#162C35" stroke-width="20" stroke-linecap="round"/>
+</svg>

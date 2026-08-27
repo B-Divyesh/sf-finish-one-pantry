@@ -1,0 +1,9 @@
+{
+  "created": "2026-08-27",
+  "tool": "/opt/fleet/lib/gen-image.sh",
+  "model": "factory-image Azure deployment",
+  "size": "1536x1024",
+  "quality": "medium",
+  "prompt": "Overhead editorial still life of three plain unbranded repeat pantry packages on an open handwritten lab notebook, one emptied matte cardboard package tipped on its side, a short graphite pencil, a tiny grocery checklist represented only by abstract lines with one muted oxide red stamped circle. Warm recycled oat paper, faint square grid, fountain-pen blue-black lines, aged brass paper tape, one small leaf-green mark. Soft window daylight from upper left, gentle real shadows, straight overhead lens, quiet practical composition with generous negative space, handcrafted analog imperfection, object edges clear for a mobile crop. No readable text, no letters, no numbers, no watermark, no logos, no brands, no people, no hands, no glossy interface, no gradients, no neon, no supermarket labels.",
+  "review": "Selected after visual inspection: anonymous packages, no legible text or brands, no people, coherent notebook palette, empty carton communicates depletion."
+}
