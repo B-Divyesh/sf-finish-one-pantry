@@ -1,0 +1,11 @@
+{
+  "slug": "finish-one-pantry",
+  "title": "Finish One Pantry",
+  "artifact_class": "pwa-offline",
+  "user": "A household that buys repeat packages and wants a low-effort way to know when a replacement belongs on the list.",
+  "smallest_useful_product": "Offline mobile PWA with a pinned shelf of recurring packages and one Finish button that decrements a simple reserve count and adds an item to a local list at the chosen threshold.",
+  "success_measure": "After 30 days, 60% of pilot users still record at least three finish events per week and report fewer than one surprise stockout for tracked items.",
+  "constraints": "No product database or retailer data; exportable local JSON; work one-handed; tolerate missed events without claiming inventory precision.",
+  "non_goals": ["Barcode database", "Receipt OCR", "Expiry tracking", "Recipes", "Household accounting"],
+  "monetization": "free"
+}
