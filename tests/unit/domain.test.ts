@@ -31,6 +31,8 @@ describe('pantry signal', () => {
   it('rejects unrelated or malformed imports', () => {
     expect(() => validateExport({ version: 1, items: [] })).toThrow(/not a supported/i);
     expect(() => validateExport({ product: 'finish-one-pantry', version: 1, exportedAt: now.toISOString(), items: [{ id: 'bad' }], events: [] })).toThrow(/invalid/i);
+    const valid = createItem('Flour', 2, 1, now);
+    expect(() => validateExport({ product: 'finish-one-pantry', version: 1, exportedAt: now.toISOString(), items: [{ ...valid, id: '\" onmouseover=\"alert(1)' }], events: [] })).toThrow(/invalid/i);
   });
 });
 

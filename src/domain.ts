@@ -60,17 +60,23 @@ export function makeEvent(item: PantryItem, kind: FinishEvent['kind'], delta: nu
 function isItem(value: unknown): value is PantryItem {
   if (!value || typeof value !== 'object') return false;
   const item = value as Record<string, unknown>;
-  return typeof item.id === 'string' && typeof item.name === 'string' && item.name.length > 0 && item.name.length <= 60 &&
+  return typeof item.id === 'string' && /^[A-Za-z0-9_-]{1,80}$/.test(item.id) && typeof item.name === 'string' && item.name.length > 0 && item.name.length <= 60 &&
     Number.isInteger(item.reserve) && Number(item.reserve) >= 0 && Number(item.reserve) <= 99 &&
     Number.isInteger(item.threshold) && Number(item.threshold) >= 0 && Number(item.threshold) <= 20 &&
-    typeof item.onList === 'boolean' && typeof item.createdAt === 'string' && typeof item.updatedAt === 'string';
+    typeof item.onList === 'boolean' && isDate(item.createdAt) && isDate(item.updatedAt);
 }
 
 function isEvent(value: unknown): value is FinishEvent {
   if (!value || typeof value !== 'object') return false;
   const event = value as Record<string, unknown>;
-  return typeof event.id === 'string' && typeof event.itemId === 'string' && typeof event.itemName === 'string' &&
-    ['finished', 'corrected', 'bought'].includes(String(event.kind)) && Number.isInteger(event.delta) && typeof event.at === 'string';
+  return typeof event.id === 'string' && /^[A-Za-z0-9_-]{1,80}$/.test(event.id) &&
+    typeof event.itemId === 'string' && /^[A-Za-z0-9_-]{1,80}$/.test(event.itemId) &&
+    typeof event.itemName === 'string' && event.itemName.length > 0 && event.itemName.length <= 60 &&
+    ['finished', 'corrected', 'bought'].includes(String(event.kind)) && Number.isInteger(event.delta) && Math.abs(Number(event.delta)) <= 99 && isDate(event.at);
+}
+
+function isDate(value: unknown): value is string {
+  return typeof value === 'string' && Number.isFinite(Date.parse(value));
 }
 
 export function validateExport(value: unknown): PantryExport {
@@ -81,5 +87,6 @@ export function validateExport(value: unknown): PantryExport {
   }
   if (!data.items.every(isItem) || !data.events.every(isEvent)) throw new Error('The export contains invalid pantry records.');
   if (new Set(data.items.map((item) => item.id)).size !== data.items.length) throw new Error('The export contains duplicate items.');
+  if (new Set(data.events.map((event) => event.id)).size !== data.events.length) throw new Error('The export contains duplicate history records.');
   return data as unknown as PantryExport;
 }

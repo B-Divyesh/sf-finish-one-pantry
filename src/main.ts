@@ -105,7 +105,7 @@ async function startApp() {
   function renderMore() {
     return `<section class="more-heading"><p class="eyebrow">Back pocket</p><h2>Data & help</h2><p>Your notebook lives only in this browser. Make a backup before changing devices or clearing site data.</p></section>
       <div class="utility-grid">
-        <section><h3>Keep a copy</h3><p>Export every item and recent pencil mark as readable JSON.</p><button class="secondary-button" type="button" data-action="export" ${items.length ? '' : 'disabled'}>Export backup</button><label class="secondary-button file-button" for="import-file">Import backup</label><input class="sr-only" id="import-file" type="file" accept="application/json,.json"></section>
+        <section><h3>Keep a copy</h3><p>Export every item and recent pencil mark as readable JSON.</p><button class="secondary-button" type="button" data-action="export" ${items.length ? '' : 'disabled'}>Export backup</button><button class="secondary-button" type="button" data-action="choose-import">Import backup</button><input hidden id="import-file" type="file" accept="application/json,.json"></section>
         <section><h3>How the signal works</h3><ol class="how-list"><li><span>1</span>Set a rough package count and the line where shopping should begin.</li><li><span>2</span>Tap <strong>Finish one</strong> when a package empties.</li><li><span>3</span>At the line, it appears once on your shopping list.</li></ol></section>
         <section><h3>Storage</h3><p>${store.persistent ? 'Saved locally in this browser and available offline after the first successful load.' : 'Local persistence is blocked. Changes last only while this page remains open.'}</p><p class="data-summary">${plural(items.length, 'item')} · ${plural(events.length, 'pencil mark')}</p>${items.length ? '<button class="danger-button" type="button" data-action="erase">Erase this notebook</button>' : ''}</section>
         <section><h3>What this does not do</h3><p>No expiry dates, barcode scanning, recipes, retailer data, accounts, or claims of exact inventory. That is the point.</p></section>
@@ -133,6 +133,7 @@ async function startApp() {
       if (action === 'decrease' && item) return void await correct(item, -1);
       if (action === 'bought' && item) return openBoughtDialog(item);
       if (action === 'export') return exportData();
+      if (action === 'choose-import') return app.querySelector<HTMLInputElement>('#import-file')?.click();
       if (action === 'erase') return confirmErase();
     } catch (error) { persistError(error); }
   }
@@ -171,7 +172,7 @@ async function startApp() {
       <form method="dialog" class="paper-form" id="item-form">
         <button class="dialog-close" value="cancel" aria-label="Close without saving">×</button>
         <p class="eyebrow">${item ? 'Adjust this note' : 'Pin a repeat package'}</p><h2>${item ? `Edit ${escapeHtml(item.name)}` : 'What do you finish often?'}</h2>
-        <label for="item-name">Item name</label><input id="item-name" name="name" required maxlength="60" autocomplete="off" value="${item ? escapeHtml(item.name) : ''}" placeholder="e.g. Oat milk">
+        <label for="item-name">Item name</label><input id="item-name" name="name" required maxlength="60" autocomplete="off" autofocus value="${item ? escapeHtml(item.name) : ''}" placeholder="e.g. Oat milk">
         <div class="number-fields"><div><label for="item-reserve">About how many are left?</label><input id="item-reserve" name="reserve" type="number" inputmode="numeric" min="0" max="99" required value="${item?.reserve ?? 2}"></div><div><label for="item-threshold">Add to list when this many are left</label><input id="item-threshold" name="threshold" type="number" inputmode="numeric" min="0" max="20" required value="${item?.threshold ?? 1}"></div></div>
         <p class="form-hint">Use a rough count. You can correct it from the shelf in one tap.</p><p id="form-error" class="form-error" role="alert"></p>
         <div class="dialog-actions">${item ? '<button type="button" class="danger-link" id="delete-item">Delete item</button>' : '<span></span>'}<button class="primary-button" value="save">${item ? 'Save changes' : 'Pin to shelf'}</button></div>
@@ -231,7 +232,7 @@ async function startApp() {
     dialog.addEventListener('click', (event) => { if (event.target === dialog) dialog.close('cancel'); });
     dialog.addEventListener('close', () => { if (dialog.isConnected) dialog.remove(); }, { once: true });
     dialog.showModal();
-    requestAnimationFrame(() => dialog.querySelector<HTMLElement>('input, button')?.focus());
+    requestAnimationFrame(() => (dialog.querySelector<HTMLElement>('[autofocus]') ?? dialog.querySelector<HTMLElement>('input, button'))?.focus());
     return dialog;
   }
 

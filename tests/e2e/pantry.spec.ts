@@ -39,6 +39,21 @@ test('supports undo after a finish event', async ({ page }) => {
   await expect(page.getByLabel('About 3 sealed packages left')).toBeVisible();
 });
 
+test('operates the primary path from the keyboard', async ({ page }) => {
+  const addButton = page.getByRole('button', { name: /add your first item/i });
+  await addButton.focus();
+  await page.keyboard.press('Enter');
+  await expect(page.getByLabel('Item name')).toBeFocused();
+  await page.keyboard.type('Tea');
+  const saveButton = page.getByRole('button', { name: 'Pin to shelf' });
+  await saveButton.focus();
+  await page.keyboard.press('Space');
+  const finishButton = page.getByRole('button', { name: 'Finish one' });
+  await finishButton.focus();
+  await page.keyboard.press('Enter');
+  await expect(page.getByText(/Tea: about 1 left/)).toBeVisible();
+});
+
 test('has no serious accessibility violations on core screens', async ({ page }, testInfo) => {
   const emptyResults = await new AxeBuilder({ page }).analyze();
   expect(emptyResults.violations.filter((violation) => ['serious', 'critical'].includes(violation.impact ?? ''))).toEqual([]);
