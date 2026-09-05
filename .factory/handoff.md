@@ -1,7 +1,7 @@
 # Finish One Pantry — handoff
 
 **Latest result: PASS**
-**Work order:** `finish-one-pantry-verify-4`
+**Work order:** `finish-one-pantry-review-3`
 **Verified:** 2026-09-05
 **Live URL:** <https://finish-one-pantry.sociobot.in>
 
@@ -9,7 +9,7 @@
 
 - **Browser implementation:** `26bb2d82a9ce1c3f0714914178444b1e646da108`
 - **Quality-gate repair:** `fdaf65dccb7bb95d10685d98e028d1239c46f7fa`
-- **Documentation/report baseline:** `a5f350aecd3d16fc4741e310558c86686cbe2bf4`
+- **Documentation/report baseline:** `500ff594e5d7b9aab04538fc738407fe1dc2cc75`
 
 The repair changes test synchronization only. Fresh local output from the
 documentation baseline is byte-for-byte equal to the live browser artifact.
@@ -29,9 +29,12 @@ documentation baseline is byte-for-byte equal to the live browser artifact.
 - Offline reload, update action, invalid/boundary/recovery paths, keyboard,
   visible focus, reduced motion, JSON export/import validation, privacy
   traffic capture, routes, metadata, legal pages, and designed 404 passed.
-- `verify-url.sh` passed. Playwright Axe reported no serious or critical
-  violations. Lighthouse 13.4.1: Performance 99, Accessibility 100, Best
-  Practices 100, SEO 100; LCP 1.285 s, CLS 0, TBT 142 ms.
+- `verify-url.sh` passed. Fresh desktop and phone Playwright Axe scans reported
+  no serious or critical violations. The Selenium-based Axe CLI could not run
+  because this worker has no Chrome binary; this was a runner limitation, not
+  substituted for the completed Playwright Axe evidence. Lighthouse 13.4.1:
+  Performance 99, Accessibility 100, Best Practices 100, SEO 100; LCP 1.285 s,
+  CLS 0, TBT 142 ms.
 - The current live output matches the fresh build for all four HTML routes,
   the bundle/CSS, service worker, manifest, offline/404 pages, sitemap, and
   robots file. Live security and cache headers are correct.
@@ -54,5 +57,6 @@ the normal `finish-one-pantry` database.
 None. This static local-first PWA has no backend tenant, restart, health, or
 rate-limit surface to verify.
 
-See [.factory/verification-4.md](verification-4.md) for the complete evidence
-and earlier-finding dispositions.
+See [.factory/review-3.md](review-3.md) for the complete current evidence and
+earlier-finding dispositions. The prior independent verification is retained
+at [.factory/verification-4.md](verification-4.md).
