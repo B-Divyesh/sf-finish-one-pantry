@@ -1,35 +1,34 @@
 # Finish One Pantry — handoff
 
-**Latest result: PASS**
+**Latest result: FAIL**
 
-**Work order:** finish-one-pantry-verify-3
+**Work order:** finish-one-pantry-review-2
 **Live URL:** <https://finish-one-pantry.sociobot.in>
-**Verified:** 2026-09-05
+**Reviewed:** 2026-09-05
 
 ## Versions
 
-- **Reviewed implementation:** `26bb2d82a9ce1c3f0714914178444b1e646da108`.
-  It adds the isolated demo, claim coverage, routes/metadata, and real 404.
-- **Documentation/test baseline:** `04f1d6a67ad8598eb4e734824746424e4db98a3b`.
-  The later changes are only `tests/e2e/pantry.spec.ts` and handoff/report
-  documentation; they do not alter the shipped browser artifact.
+- **Implementation reviewed:** `26bb2d82a9ce1c3f0714914178444b1e646da108`.
+- **Documentation/test baseline:** `35af7f6e0c0b54ecb89d0d06888f146336132fb1`.
+  The later commits are report/test changes only; fresh build and live artifact
+  hashes match.
 
-## What is delivered
+## What was reviewed
 
-- A local-first pantry replacement signal: finish a recurring package, add it
-  at its chosen threshold, then mark it bought and record what came home.
-- Corrections, undo, persistent browser storage, JSON backup/import validation,
-  offline reload after first visit, standalone manifest, and update prompt.
-- `/demo/` and `?demo=1` with four realistic packages in the separate
-  `demo:finish-one-pantry` IndexedDB namespace. Its banner, reset, and
-  start-for-real controls never write normal pantry data.
-- Plain first-screen copy, route titles/metadata, sitemap, social preview,
-  designed HTTP 404, privacy/terms, restrictive response headers, and original
-  notebook art with provenance in `.factory/design.md`.
+The product is a local-first pantry replacement signal. Users finish a repeat
+package, add it to a shopping list at a chosen point, then mark it bought and
+record what came home. It includes corrections, undo, local browser storage,
+JSON backup/import validation, offline reload, an installable manifest, and an
+update action.
+
+`/demo/` and `?demo=1` use the separate `demo:finish-one-pantry` IndexedDB
+namespace with Oat milk, Basmati rice, Laundry detergent, and Coffee beans.
+The demo banner, reset action, and start-for-real action were checked on fresh
+phone and desktop contexts and did not change normal data.
 
 ## Verification
 
-From a clean clone at the documentation/test baseline:
+From a clean clone:
 
 ```sh
 npm ci
@@ -37,49 +36,38 @@ npm test
 npm run build
 ```
 
-Results: 0 dependency vulnerabilities; 8 unit tests passed; the production
-build created `dist/`; and 28 desktop/mobile Playwright tests passed. The app
-bundle is 30,034 bytes raw / 9,796 bytes gzip; CSS is 19,711 bytes raw / 4,979
-bytes gzip.
-
-Every command in `.factory/claims.json` was run separately and passed. The live
-run also passed all 28 checks:
+`npm ci` reported 0 vulnerabilities. The first clean `npm test` failed one
+desktop `@claim:local-save` case after reload; the immediate retry passed all 8
+unit tests and 28 Playwright checks, and `npm run build` produced `dist/`.
+Every one of the 10 individual commands in `.factory/claims.json` passed, as
+did 28/28 live checks:
 
 ```sh
 E2E_BASE_URL=https://finish-one-pantry.sociobot.in npx playwright test --workers=1
 ```
 
-Fresh phone and desktop sessions showed the job (“Track finished packages for
-your shopping list”), audience (households buying repeat milk, rice, or
-detergent), and first action (“Try it with sample data”) before scrolling. The
-manual live demo check confirmed the banner, realistic sample, reset, and
-real-data isolation. Axe found no serious or critical issues, `verify-url.sh`
-reported no console/page errors, focus is visible, reduced motion has no
-feedback animation, and a phone viewport has no horizontal overflow.
+Fresh phone and desktop checks confirmed the job, audience, sample-first
+action, realistic demo, reset/isolation, normal and recovery flows, offline,
+privacy, accessibility, legal pages, links, and designed HTTP 404. Axe
+Playwright found no serious/critical violations; `verify-url.sh` passed.
+The `@axe-core/cli` binary could not launch because this worker lacks
+`/usr/bin/chromedriver`, so no CLI result is claimed.
 
-The live artifact matches the local candidate build for the entry document,
-app bundle, demo/privacy/terms pages, service worker, manifest, offline page,
-404 page, and sitemap. Live headers have immutable hashed assets, revalidating
-documents/SW, CSP, Permissions-Policy, X-Frame-Options, HSTS,
-X-Content-Type-Options, Referrer-Policy, and correct manifest MIME type.
+## Known gap and next step
 
-## Earlier findings and known gaps
+The result is FAIL because the mandatory full `npm test` gate is flaky. The
+first clean run failed its desktop persistence-claim assertion; the retry,
+individual command, repeated focused runs, and live suite passed. This review
+does not claim demonstrated data loss, but the documented release gate must be
+made deterministic. Repair the synchronization/race, then show repeated clean
+`npm test` passes before declaring PASS.
 
-All earlier findings are resolved: the demo/claims/plain-language/route gaps
-from review 1, and hashed-cache/CSP/Permissions-Policy/manifest-MIME gaps from
-verification 1. There are no known product defects and no untested public
-claims.
+Earlier demo, claims, plain-language, route/metadata/404, cache, CSP,
+Permissions-Policy, and manifest-MIME findings are resolved. Backend health,
+tenant, persistence-restart, and 429 checks are not applicable to this static
+local-first PWA.
 
-Lighthouse could not connect to the worker Chromium during this verification,
-so this handoff makes no new Lighthouse-score claim. The completed browser,
-accessibility, offline, bundle, and response checks are recorded in
-`.factory/verification-3.md`.
+## Run and deploy
 
-Backend tenant, restart-persistence, health, and rate-limit checks are not
-applicable because this product has no backend and stores state locally.
-
-## Deploy
-
-Requires Node.js 20 or newer. Deploy `dist/` with the factory static deployer.
-The factory owns deployment, DNS, and billing; do not add remote services or
-product secrets.
+Requires Node.js 20 or newer. Run the commands above. Deploy `dist/` with the
+factory static deployer. The factory owns deployment, DNS, and billing.
