@@ -1,26 +1,36 @@
-# Finish One Pantry — verification handoff
+# Finish One Pantry — handoff
 
-**Result: PASS**
+**Latest result: FAIL**
 
-**Work order:** `finish-one-pantry-verify-2`
+**Work order:** `finish-one-pantry-review-1`
 
-**Verified candidate:** `a023fffab6e016949cfa5634a0472bfc231d228f`
+**Implementation reviewed:** `a023fffab6e016949cfa5634a0472bfc231d228f`
 
-**Verified deployment:** <https://finish-one-pantry.sociobot.in>
-**Date:** 2026-08-28
+**Documentation baseline reviewed:** `cfebcc03842a1023795084ace9cb27c47c7d2ed7`
 
-Independent QA found no release-blocking defects. The live PWA matches the candidate production output for the entry document, hashed JS/CSS, service worker, manifest, and offline fallback; all sampled SHA-256 values matched.
+**Live URL:** <https://finish-one-pantry.sociobot.in>
+**Date:** 2026-09-05
 
-## Verified
+No product code was changed in this work order. The live output matches the locally built implementation candidate for the entry document, hashed JS/CSS, service worker, manifest, and offline fallback.
 
-- Clean install: `npm ci` — 0 audited vulnerabilities.
-- Exact local gate: `npm test` — 7 unit tests plus production typecheck/build and 12 desktop/mobile browser tests; all passed (38.3 s).
-- Exact production build: `npm run build` — passed and produces `dist/`.
-- Live browser gate: all 12 Playwright desktop/mobile scenarios passed against the deployed URL (status 0; 0 unexpected/flaky).
-- Real job: add, finish at threshold, list once, mark bought, reconcile a rough reserve, undo/correct, persist after reload; JSON export/import; malformed-import recovery; offline reload; service-worker update prompt/action.
-- Accessibility: 0 axe serious/critical findings; required landmarks/title/lang/heading, keyboard path, visible 4px focus, and mobile 390px layout passed.
-- Privacy and deployment policy: no observed third-party requests or tracking; local IndexedDB/export model; CSP, Permissions-Policy, framing, nosniff, referrer/HSTS headers; immutable hashed assets and revalidating document/service-worker cache policy.
-- Lighthouse local production preview (mobile): Performance 93, Accessibility 100, Best Practices 100, SEO 100; LCP 1.8 s, CLS 0.
+## What was verified
+
+- `npm ci` completed with 0 vulnerabilities.
+- `npm test`, `npm run build`, and all 12 live desktop/mobile Playwright checks passed.
+- The normal local-first pantry workflow, error/boundary recovery, keyboard operation, offline reload, privacy/terms routes, privacy request capture, and Axe Playwright smoke scans passed.
+- Earlier deployment findings for immutable assets, security headers, and manifest MIME are resolved on live.
+
+## What remains
+
+The product cannot be accepted yet. The latest independent review found 5 findings and 11 untested public claim categories:
+
+1. No isolated one-click sample/demo exists; `?demo=1` displays the real browser notebook.
+2. `.factory/claims.json` and tagged claim tests are missing.
+3. First-screen copy and headings do not satisfy the required plain-words landing shape; `.factory/copy-audit.md` is missing.
+4. Required demo/404/sitemap/canonical/social route metadata is incomplete.
+5. This handoff previously presented a stale PASS despite those mandatory-contract gaps.
+
+See [`.factory/review-1.md`](review-1.md) for reproduction evidence, prior-finding disposition, and the required repair work.
 
 ## Run / verify
 
@@ -28,11 +38,7 @@ Independent QA found no release-blocking defects. The live PWA matches the candi
 npm ci
 npm test
 npm run build
-E2E_BASE_URL=https://finish-one-pantry.sociobot.in npx playwright test
+E2E_BASE_URL=https://finish-one-pantry.sociobot.in npx playwright test --workers=1
 ```
 
-Full evidence, header values, hashes, and tested recovery paths are in [`.factory/verification-2.md`](verification-2.md).
-
-## Known gaps / next steps
-
-No product or deployment blocker is known. Lighthouse’s lab TBT was 320 ms; it is not a field INP result. Collect field interaction data only if product telemetry is later introduced with explicit consent; this local-first product intentionally has none today.
+After the remaining work, verify the demo entry point, every command in the new claims registry, live routes/metadata, and the clean build before changing this handoff to PASS.
