@@ -77,6 +77,10 @@ scrolling:
 - **First action:** Try it with sample data; it loads four common pantry
   packages.
 
+At 390 px there was no horizontal overflow. The Finish one target measured
+95 × 80 CSS px, keyboard focus had a 4 px oxide outline, and reduced-motion
+dialog animation computed to 1e-05s.
+
 The live demo showed its persistent label and the four named packages. In a
 fresh browser, finishing sample Oat milk, resetting the demo, and then starting
 for real restored the sample and left an independently added Real lentils
