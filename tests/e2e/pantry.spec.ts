@@ -60,9 +60,15 @@ test('corrects a missed count and undoes a finish event @claim:corrections-and-u
 test('keeps sample changes after a browser reload @claim:local-save', async ({ page }) => {
   await openDemo(page);
   await page.getByRole('button', { name: 'Finish one Oat milk' }).click();
+  // The changed control is rendered only after both IndexedDB writes commit.
+  // Waiting for that user-visible outcome keeps reload from cancelling the
+  // async click handler while still testing the real persistence boundary.
+  await expect(page.getByLabel('Oat milk: about 1 sealed package left')).toBeVisible();
   await page.reload();
   await expect(page.getByLabel('Oat milk: about 1 sealed package left')).toBeVisible();
   await expect(page.getByText('Demo — sample data, nothing is saved')).toBeVisible();
+  await page.getByRole('button', { name: /Shopping list/ }).click();
+  await expect(page.getByRole('button', { name: 'Mark Oat milk as bought' })).toBeVisible();
 });
 
 test('works offline after the first visit with sample data @claim:offline-reload', async ({ browser }) => {
