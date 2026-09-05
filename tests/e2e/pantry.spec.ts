@@ -20,6 +20,8 @@ test('loads an isolated, populated sample and leaves real pantry data alone @cla
   await expect(page.getByText('On the shopping list')).toBeVisible();
   await page.getByRole('button', { name: 'Finish one Oat milk' }).click();
   await expect(page.getByText(/Oat milk: about 1 left/)).toBeVisible();
+  await page.getByRole('button', { name: 'Reset demo' }).click();
+  await expect(page.getByLabel('Oat milk: about 2 sealed packages left')).toBeVisible();
   await page.getByRole('button', { name: 'Start for real' }).click();
   await page.waitForURL(/\/$/);
   await expect(page.getByRole('heading', { name: 'Real lentils', level: 3 })).toBeVisible();
