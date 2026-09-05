@@ -2,128 +2,84 @@
 
 **Latest result: PASS**
 
-**Work order:** finish-one-pantry-repair-2
+**Work order:** finish-one-pantry-verify-3
 **Live URL:** <https://finish-one-pantry.sociobot.in>
 **Verified:** 2026-09-05
 
 ## Versions
 
-- **Deployed implementation:** 26bb2d82a9ce1c3f0714914178444b1e646da108
-  (isolated demo, claims, routes, metadata, and 404).
-- **Latest test/documentation baseline:** 223d2cabf5ebd3cfb39ab2dc644aab31e6eb89c7
-  (adds the demo-reset regression after deployment; it does not change the
-  shipped browser artifact).
-- The earlier review baseline was c515a6f. The product code changes are
-  d43e5ac and 26bb2d8; later commits only add verification evidence.
+- **Reviewed implementation:** `26bb2d82a9ce1c3f0714914178444b1e646da108`.
+  It adds the isolated demo, claim coverage, routes/metadata, and real 404.
+- **Documentation/test baseline:** `04f1d6a67ad8598eb4e734824746424e4db98a3b`.
+  The later changes are only `tests/e2e/pantry.spec.ts` and handoff/report
+  documentation; they do not alter the shipped browser artifact.
 
-## What changed
+## What is delivered
 
-- Added /demo/ and ?demo=1 with four realistic packages in the separate
-  IndexedDB database named demo:finish-one-pantry.
-- Added the persistent demo label, Reset demo, and Start for real. Leaving demo
-  clears only demo data and cannot write normal pantry data.
-- Reworked the first screen around the job, audience, first sample action, and
-  three short facts. The landing h1 is now “Track finished packages for your
-  shopping list.”
-- Added claims registry, demo documentation, terminology and copy audit, plus
-  demo-based observable browser tests for every public promise.
-- Added route-specific demo, privacy, terms, and 404 pages; canonical, Open
-  Graph, Twitter, favicon, apple-touch, robots, sitemap, and social-preview
-  metadata. Unknown live routes now return the designed 404 with HTTP 404.
-- Added a local social image cropped from the product’s original notebook art.
-  Its provenance is recorded in design.md.
-- Preserved the local-first workflow, offline service worker, versioned cache,
-  JSON backup checks, update prompt, memory fallback, and existing restrictive
-  static response policy.
+- A local-first pantry replacement signal: finish a recurring package, add it
+  at its chosen threshold, then mark it bought and record what came home.
+- Corrections, undo, persistent browser storage, JSON backup/import validation,
+  offline reload after first visit, standalone manifest, and update prompt.
+- `/demo/` and `?demo=1` with four realistic packages in the separate
+  `demo:finish-one-pantry` IndexedDB namespace. Its banner, reset, and
+  start-for-real controls never write normal pantry data.
+- Plain first-screen copy, route titles/metadata, sitemap, social preview,
+  designed HTTP 404, privacy/terms, restrictive response headers, and original
+  notebook art with provenance in `.factory/design.md`.
 
 ## Verification
 
-### Clean checkout
+From a clean clone at the documentation/test baseline:
 
-An isolated clone at implementation SHA 26bb2d8 ran npm ci with 0
-vulnerabilities, then:
+```sh
+npm ci
+npm test
+npm run build
+```
 
-    npm test
-    npm run build
+Results: 0 dependency vulnerabilities; 8 unit tests passed; the production
+build created `dist/`; and 28 desktop/mobile Playwright tests passed. The app
+bundle is 30,034 bytes raw / 9,796 bytes gzip; CSS is 19,711 bytes raw / 4,979
+bytes gzip.
 
-Results: 8 unit tests and 28 Playwright checks passed across desktop and mobile.
-The final bundle is 30.03 KB JavaScript raw / 9.78 KB gzip and 19.71 KB CSS raw
-/ 4.96 KB gzip.
+Every command in `.factory/claims.json` was run separately and passed. The live
+run also passed all 28 checks:
 
-Every one of the 10 commands declared in claims.json was then run individually
-from that clean clone. All passed. Each claim test starts at /demo/ and runs in
-both desktop and mobile Chromium. The later test-only commit also ran:
+```sh
+E2E_BASE_URL=https://finish-one-pantry.sociobot.in npx playwright test --workers=1
+```
 
-    npm run test:claim -- @claim:demo-sandbox
+Fresh phone and desktop sessions showed the job (“Track finished packages for
+your shopping list”), audience (households buying repeat milk, rice, or
+detergent), and first action (“Try it with sample data”) before scrolling. The
+manual live demo check confirmed the banner, realistic sample, reset, and
+real-data isolation. Axe found no serious or critical issues, `verify-url.sh`
+reported no console/page errors, focus is visible, reduced motion has no
+feedback animation, and a phone viewport has no horizontal overflow.
 
-This specifically proves Reset demo restores Oat milk to two packages before
-Start for real returns to unmodified real data.
+The live artifact matches the local candidate build for the entry document,
+app bundle, demo/privacy/terms pages, service worker, manifest, offline page,
+404 page, and sitemap. Live headers have immutable hashed assets, revalidating
+documents/SW, CSP, Permissions-Policy, X-Frame-Options, HSTS,
+X-Content-Type-Options, Referrer-Policy, and correct manifest MIME type.
 
-### Live HTTPS
+## Earlier findings and known gaps
 
-The deployed implementation passed:
+All earlier findings are resolved: the demo/claims/plain-language/route gaps
+from review 1, and hashed-cache/CSP/Permissions-Policy/manifest-MIME gaps from
+verification 1. There are no known product defects and no untested public
+claims.
 
-    E2E_BASE_URL=https://finish-one-pantry.sociobot.in npx playwright test --workers=1
+Lighthouse could not connect to the worker Chromium during this verification,
+so this handoff makes no new Lighthouse-score claim. The completed browser,
+accessibility, offline, bundle, and response checks are recorded in
+`.factory/verification-3.md`.
 
-All 28 live desktop/mobile checks passed. The worker verify-url check passed
-with title, language, h1, main landmark, image alt text, and no console errors.
-The Playwright Axe scan reported zero serious or critical violations.
+Backend tenant, restart-persistence, health, and rate-limit checks are not
+applicable because this product has no backend and stores state locally.
 
-Fresh desktop and phone sessions showed the same first-screen result before
-scrolling:
+## Deploy
 
-- **Job:** Track finished packages for your shopping list.
-- **Audience:** households buying milk, rice, or detergent again.
-- **First action:** Try it with sample data; it loads four common pantry
-  packages.
-
-At 390 px there was no horizontal overflow. The Finish one target measured
-95 × 80 CSS px, keyboard focus had a 4 px oxide outline, and reduced-motion
-dialog animation computed to 1e-05s.
-
-The live demo showed its persistent label and the four named packages. In a
-fresh browser, finishing sample Oat milk, resetting the demo, and then starting
-for real restored the sample and left an independently added Real lentils
-package unchanged.
-
-Live routes returned 200 for /, /demo/, /privacy/, /terms/, /sitemap.xml, and
-/robots.txt. /does-not-exist returned the designed page with HTTP 404. The
-deployed hashed JavaScript response is immutable for one year; documents are
-revalidating. CSP, Permissions-Policy, X-Frame-Options, HSTS,
-X-Content-Type-Options, and Referrer-Policy are present. The manifest is served
-as application/manifest+json.
-
-## Prior finding disposition
-
-| Finding | Status |
-| --- | --- |
-| R1: no isolated sample demo | Resolved with demo:finish-one-pantry, reset, and start-for-real verification. |
-| R2: no claims registry or tagged tests | Resolved with 10 declared claims and 10 outcome-based demo tests. |
-| R3: first-screen and plain-words gaps | Resolved; copy audit records the landing wording and terminology. |
-| R4: demo, 404, sitemap, canonical, and social metadata gaps | Resolved and checked live. |
-| R5: stale PASS handoff | Resolved by this current, versioned handoff. |
-| Earlier cache, CSP, and manifest MIME findings | Still resolved on the live deployment. |
-
-## Known gaps
-
-No product defects are known.
-
-Lighthouse 13.4.1 could not connect to the worker-provided Chromium when run
-locally, so this handoff does not claim a new Lighthouse score. The build
-budget, live browser checks, mobile checks, verify-url result, and Axe scan all
-completed successfully. This is a runner limitation, not a product failure.
-
-Backend tenant, persistence-restart, health, and rate-limit checks are not
-applicable: this is a static local-first PWA with no backend.
-
-## Run and deploy
-
-Requires Node.js 20 or newer.
-
-    npm ci
-    npm test
-    npm run build
-
-Run each command listed in .factory/claims.json from a clean checkout. Static
-output is dist/. Deploy with the factory static deployer; it reuses the existing
-sf-finish-one-pantry Static Web App and does not alter other products.
+Requires Node.js 20 or newer. Deploy `dist/` with the factory static deployer.
+The factory owns deployment, DNS, and billing; do not add remote services or
+product secrets.
