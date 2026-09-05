@@ -1,4 +1,4 @@
-const VERSION = 'finish-one-pantry-v1';
+const VERSION = 'finish-one-pantry-v2';
 const SHELL = `${VERSION}-shell`;
 const RUNTIME = `${VERSION}-runtime`;
 const BUILD_ASSETS = __BUILD_ASSETS__;
@@ -36,7 +36,7 @@ self.addEventListener('fetch', (event) => {
       const copy = response.clone();
       caches.open(RUNTIME).then((cache) => cache.put(request, copy));
       return response;
-    }).catch(async () => (await caches.match(request, { ignoreVary: true })) || (await caches.match(url.pathname === '/privacy' ? '/privacy/index.html' : url.pathname === '/terms' ? '/terms/index.html' : '/index.html', { ignoreVary: true })) || caches.match('/offline.html', { ignoreVary: true })));
+    }).catch(async () => (await caches.match(request, { ignoreVary: true })) || (await caches.match(url.pathname === '/privacy' ? '/privacy/index.html' : url.pathname === '/terms' ? '/terms/index.html' : url.pathname === '/demo' || url.pathname === '/demo/' ? '/demo/index.html' : '/index.html', { ignoreVary: true })) || caches.match('/offline.html', { ignoreVary: true })));
     return;
   }
 

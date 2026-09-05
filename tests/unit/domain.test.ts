@@ -54,4 +54,16 @@ describe('IndexedDB store', () => {
     expect(empty.items).toEqual([]);
     expect(empty.events).toEqual([]);
   });
+
+  it('keeps a demo database separate from the normal pantry database', async () => {
+    const { createStore } = await import('../../src/storage');
+    const normal = await createStore('finish-one-pantry');
+    const demo = await createStore('demo:finish-one-pantry');
+    const normalItem = createItem('Real pasta', 2, 1);
+    const demoItem = createItem('Sample pasta', 2, 1);
+    await normal.saveItem(normalItem);
+    await demo.saveItem(demoItem);
+    expect((await normal.load()).items.map((item) => item.name)).toEqual(['Real pasta']);
+    expect((await demo.load()).items.map((item) => item.name)).toEqual(['Sample pasta']);
+  });
 });

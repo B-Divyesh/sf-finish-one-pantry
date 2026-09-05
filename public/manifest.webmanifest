@@ -3,7 +3,7 @@
   "name": "Finish One Pantry",
   "short_name": "Finish One",
   "description": "Finish a package now; remember its replacement later.",
-  "start_url": "/?source=installed&v=1",
+  "start_url": "/?source=installed&v=2",
   "scope": "/",
   "display": "standalone",
   "orientation": "any",

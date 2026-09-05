@@ -7,9 +7,10 @@
     "dev": "vite",
     "build": "tsc --noEmit && vite build && node scripts/postbuild.mjs",
     "preview": "vite preview",
-    "test": "vitest run tests/unit && npm run build && playwright test",
+    "test": "npm run test:unit && npm run build && npm run test:e2e",
     "test:unit": "vitest run tests/unit",
-    "test:e2e": "playwright test"
+    "test:e2e": "playwright test",
+    "test:claim": "npm run build && playwright test --grep"
   },
   "devDependencies": {
     "@axe-core/playwright": "4.10.2",

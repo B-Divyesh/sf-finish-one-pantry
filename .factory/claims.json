@@ -1,0 +1,72 @@
+[
+  {
+    "id": "demo-sandbox",
+    "claim": "Try a populated sample without an account or changing your pantry.",
+    "where": "home action, demo banner, README",
+    "test": "npm run test:claim -- @claim:demo-sandbox",
+    "sandbox": "Fresh browser context: create a real package, use /demo/, finish a sample package, leave demo, and verify the real package is unchanged."
+  },
+  {
+    "id": "list-at-threshold",
+    "claim": "Finishing a package adds it to the shopping list at its chosen point.",
+    "where": "How it works, shelf feedback, README",
+    "test": "npm run test:claim -- @claim:list-at-threshold",
+    "sandbox": "Fresh /demo/ sample: finish Oat milk from two to one and verify it appears in the shopping list."
+  },
+  {
+    "id": "purchase-reconciliation",
+    "claim": "Marking a package bought adds the packages that came home and clears it from the list.",
+    "where": "How it works, shopping list, README",
+    "test": "npm run test:claim -- @claim:purchase-reconciliation",
+    "sandbox": "Fresh /demo/ sample: list Oat milk, record two bought, then verify its reserve and list state."
+  },
+  {
+    "id": "corrections-and-undo",
+    "claim": "You can correct a missed count and undo a finish event.",
+    "where": "shelf controls, Data and help, README",
+    "test": "npm run test:claim -- @claim:corrections-and-undo",
+    "sandbox": "Fresh /demo/ sample: increase Basmati rice, finish Oat milk, and use Undo."
+  },
+  {
+    "id": "local-save",
+    "claim": "Changes stay in this browser after a reload.",
+    "where": "home facts, Data and help, README",
+    "test": "npm run test:claim -- @claim:local-save",
+    "sandbox": "Fresh /demo/ sample: finish Oat milk, reload, and verify the changed reserve and demo label."
+  },
+  {
+    "id": "offline-reload",
+    "claim": "Works offline after the first visit.",
+    "where": "home facts, Data and help, README",
+    "test": "npm run test:claim -- @claim:offline-reload",
+    "sandbox": "Dedicated fresh browser context: open /demo/, wait for the service worker, set offline, reload, and verify sample data."
+  },
+  {
+    "id": "json-backup",
+    "claim": "Exports a JSON backup of your pantry.",
+    "where": "Data and help, README",
+    "test": "npm run test:claim -- @claim:json-backup",
+    "sandbox": "Fresh /demo/ sample: export the backup and parse the downloaded JSON for the four sample packages."
+  },
+  {
+    "id": "backup-validation",
+    "claim": "Checks a backup before replacing your pantry.",
+    "where": "Data and help, README",
+    "test": "npm run test:claim -- @claim:backup-validation",
+    "sandbox": "Fresh /demo/ sample: choose an invalid JSON file, verify the error, and verify a sample package remains."
+  },
+  {
+    "id": "installable-app",
+    "claim": "Can be installed as a standalone web app.",
+    "where": "README",
+    "test": "npm run test:claim -- @claim:installable-app",
+    "sandbox": "Fresh /demo/ page: fetch the linked manifest and verify standalone display plus 192px and 512px icons."
+  },
+  {
+    "id": "local-private",
+    "claim": "Pantry data stays in this browser and is not sent to another origin.",
+    "where": "home facts, privacy page, README",
+    "test": "npm run test:claim -- @claim:local-private",
+    "sandbox": "Fresh /demo/ sample: record all browser requests while finishing and exporting; assert every HTTP request is same-origin."
+  }
+]

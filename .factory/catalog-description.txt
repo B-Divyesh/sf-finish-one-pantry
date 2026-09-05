@@ -1,0 +1,1 @@
+Track finished pantry packages and add replacements to a local shopping list.

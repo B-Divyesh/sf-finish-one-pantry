@@ -1,6 +1,5 @@
 import type { FinishEvent, PantryExport, PantryItem } from './domain';
 
-const DB_NAME = 'finish-one-pantry';
 const DB_VERSION = 1;
 
 export interface PantryStore {
@@ -29,9 +28,9 @@ function transactionDone(tx: IDBTransaction): Promise<void> {
   });
 }
 
-async function openDatabase(): Promise<IDBDatabase> {
+async function openDatabase(name: string): Promise<IDBDatabase> {
   return new Promise((resolve, reject) => {
-    const req = indexedDB.open(DB_NAME, DB_VERSION);
+    const req = indexedDB.open(name, DB_VERSION);
     req.onupgradeneeded = () => {
       const db = req.result;
       if (!db.objectStoreNames.contains('items')) db.createObjectStore('items', { keyPath: 'id' });
@@ -118,10 +117,14 @@ class MemoryStore implements PantryStore {
   async clear() { this.items = []; this.events = []; }
 }
 
-export async function createStore(): Promise<PantryStore> {
+/**
+ * Demo data always receives its own IndexedDB database.  This keeps every
+ * write in the sample notebook away from the visitor's normal pantry.
+ */
+export async function createStore(namespace = 'finish-one-pantry'): Promise<PantryStore> {
   try {
     if (!('indexedDB' in globalThis)) throw new Error('IndexedDB unavailable');
-    return new IndexedDbStore(await openDatabase());
+    return new IndexedDbStore(await openDatabase(namespace));
   } catch {
     return new MemoryStore();
   }

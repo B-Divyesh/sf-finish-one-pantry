@@ -52,6 +52,7 @@ UI transitions are 180–240 ms. A finished package gives the reserve number one
 - `public/images/notebook-pantry.webp` and AVIF/PNG fallbacks: original generated still life for the empty shelf/intro, showing three anonymous pantry packages, a pencil tick, torn graph paper, and red stamp mark. It explains the “finish one, remember later” gesture without claiming barcode or camera features.
 - PWA icons and small UI glyphs are hand-authored SVGs based on a package outline and check mark, then rasterized locally for install sizes.
 - Graph texture is pure CSS; torn edges and pencil marks are authored CSS/SVG, with no stock imagery.
+- public/images/pantry-social.jpg is a 1200 × 630 social preview mechanically cropped from the selected original notebook still life on 2026-09-05. It adds no text or new subject matter.
 
 ### Image prompt sheet
 
